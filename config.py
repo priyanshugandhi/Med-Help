@@ -1,0 +1,9 @@
+username = "En25Y_GMAIL_COM_AUT"  
+password = "Xs52CqRx4t7TDm38M"  # b7ESm6s8QYi53JxGt
+priaid_authservice_url = "https://authservice.priaid.ch/login"  # https://sandbox-authservice.priaid.ch
+priaid_healthservice_url = "https://healthservice.priaid.ch"  # https://sandbox-healthservice.priaid.ch
+language = "en-gb"
+host = "localhost"
+dbuser = "root"
+dbpassword = ""
+BetterDoctoruserKey = "0fedaeaf5df36f560a93305c66e20373"

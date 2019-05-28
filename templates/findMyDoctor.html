@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Innovaccer - HackerCamp 2019</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="{{ url_for('static', filename='css1/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css1/mdb.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css1/style.css') }}" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+            function  initialise()
+            {
+                $('#loader').hide();
+            }
+            function isEmpty(obj)
+            {
+                for(var prop in obj) {
+                    if(obj.hasOwnProperty(prop))
+                        return false;
+                }
+                return true;
+            }
+            var gender, year, ID;
+
+            function myFunction(value) {
+                gender = value;
+             }
+            function func()
+            {
+                lat = document.getElementById('lat').value;
+                long = document.getElementById('long').value;
+                var dict=['{"lat":"' + lat + '","long":"' + long + '"}'];
+                j = JSON.parse(dict);
+                $("#tbody tr").remove();
+                $('#loader').show();
+                $.ajax({
+                        type: "POST",
+                        url: "/api/four/result",
+                        contentType: "application/json",
+                        data: JSON.stringify(j),
+                        dataType: "json",
+                        success: function(response) {
+                            $('#loader').hide();
+                            row = "";
+                            if(!isEmpty(response))
+                            {
+                                row = "<thead><tr><th>Name</th><th>Specialisations</th><th>Address</th></tr></thead>"
+                                for(var element in response)
+                                {
+                                    if(response[element]['Name'] && response[element]['specialities'][0] && response[element]['address'])
+                                    {
+                                        row += "<tr><td>" + response[element]['Name'] + "</td><td>";
+                                        for (var speciality in response[element]['specialities'])
+                                        {
+                                            row += response[element]['specialities'][speciality] + ", ";
+                                        }
+                                        row += "</td>";
+                                        row += "<td>" + response[element]['address'] + "</td>";
+                                        row += "</tr>";
+                                    }
+                                }
+                                $('#tbody').append(row);
+                            }
+                            else
+                            {
+                                var row = "<tr><td>No record Found</td><td>No record Found</td><td>No record Found</td></tr>";
+                                $('#tbody').append(row);
+                            }
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+            }
+        </script>
+        <style>
+            table tbody tr td {
+              font-size: 17px;
+            }
+                        #loader {
+                border: 16px solid #f3f3f3; /* Light grey */
+                border-top: 16px solid #3498db; /* Blue */
+                border-radius: 50%;
+                width: 120px;
+                height: 120px;
+                animation: spin 2s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+    </head>
+    <body onload="initialise()">
+        <br>
+        <div class="container">
+            <div class="card red text-center z-depth-2 light-version py-4 px-5">
+                <h1 style="color:white">Find my nearest doctor</h1>
+            </div>
+            <button type="button" class="btn btn-outline-danger waves-effect"  onclick="location.href='/';">Home</button>
+            <center>
+                <br><br>
+                <div class="md-form">
+                    <input type="number" id="lat" class="form-control">
+                    <label for="lat" class="">Latitude:</label>
+                </div>
+                <div class="md-form">
+                    <input type="number" id="long" class="form-control">
+                    <label for="long" class="">Longitude:</label>
+                </div>
+                <button  class="btn btn-primary" value="Submit" onclick="func()">Submit</button><br><br><br>
+                <h4>Nearest Doctors</h4>
+                <div id="loader"></div>
+                <table style="width: 100%" class="table-striped">
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </center>
+        </div>
+        <br>
+        <!-- SCRIPTS -->
+        <!-- JQuery -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js1/jquery-3.2.1.min.js') }}"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js1/popper.min.js') }}"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js1/bootstrap.min.js') }}"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js1/mdb.min.js') }}"></script>
+    </body>
+</html>
